@@ -3,25 +3,37 @@
 Guidelines for humans and AI agents modifying this directory. It is the Project Standalone knowledge base (UW Reality Labs standalone XR headset). It is edited in Obsidian and must also render correctly on GitHub and in plain Markdown viewers.
 
 ## Structure
-- Flat directory. One concept per note; the filename is the note title (`Hardware plan.md` → `# Hardware plan`).
-- `Project Standalone.md` is the hub. Every note links back to it (directly or via its parent note), and every new note gets a row in the hub's **Map** table.
-- Images and other binaries go in `attachments/`.
-- `AGENTS.md` is the only non-note file at the top level.
+| Location | Contents |
+|---|---|
+| Top level | Notes about the whole project: `Project Standalone.md` (hub), `Tracer bullet roadmap.md`. Plus `AGENTS.md` |
+| `hardware/` | Physical components and below-kernel design: sensors, display panels and optics, sync |
+| `platform/` | OS, kernel, distribution, board setup, toolchains |
+| `runtime/` | Monado fork: headset driver, capture, timestamping, compositor integration |
+| `tracking/` | Perception: SLAM, hand and eye tracking, tracker interfaces |
+| `attachments/` | Images and other binaries |
+
+- One concept per note; the filename is the note title (`Hardware plan.md` → `# Hardware plan`).
+- Note filenames are unique across the whole tree, even in different folders.
+- Folder names are lowercase, one word where possible (no spaces).
+- Place a note in the folder of its primary subject. Cross-cutting notes link to each other rather than being duplicated.
+- Add a new folder only when at least ~3 notes would go in it. When adding one, add a row to this table and to the hub's **Map** table.
+- `Project Standalone.md` is the hub. Every note links back to it (directly or via its parent note), and every new note gets listed in the hub's **Map** table under its folder.
 
 ## Links
-Use standard Markdown links with relative paths. **Do not use Obsidian wikilinks** (`[[...]]`) or embeds (`![[...]]`); they do not render on GitHub.
+Use standard Markdown links with paths **relative to the file containing the link**. **Do not use Obsidian wikilinks** (`[[...]]`) or embeds (`![[...]]`); they do not render on GitHub.
 
-| Target | Syntax |
+| Target | Syntax (from a note in `runtime/`) |
 |---|---|
-| Another note | `[Hardware plan](Hardware%20plan.md)` |
-| Note heading | `[Display selection](Display.md#what-selects-the-display)` (GitHub anchor: lowercase, spaces → `-`, punctuation dropped) |
-| Image | `![Data flow](attachments/Monado%20driver%20data%20flow.png)` |
+| Note in same folder | `[Sensor timestamping pipeline](Sensor%20timestamping%20pipeline.md)` |
+| Note in another folder | `[Hardware plan](../hardware/Hardware%20plan.md)` |
+| Top-level note | `[Project Standalone](../Project%20Standalone.md)` |
+| Note heading | `[Display selection](../hardware/Display.md#what-selects-the-display)` (GitHub anchor: lowercase, spaces → `-`, punctuation dropped) |
+| Image | `![Data flow](../attachments/Monado%20driver%20data%20flow.png)` |
 | External | `[Monado docs](https://monado.pages.freedesktop.org/monado/)` |
 
-- Encode spaces in paths as `%20`. Do not use angle-bracket destinations.
+- Encode spaces in paths as `%20`. Do not use angle-bracket destinations or root-absolute paths (`/hardware/...`).
 - Link text can differ from the note name when it reads better in the sentence.
-- Inside tables, links need no escaping (there is no `|` in the syntax).
-- Obsidian settings for anyone editing in Obsidian: *Settings → Files and links* → **Use [[Wikilinks]]: off**, **New link format: Relative path to file**. Obsidian then inserts compatible links automatically.
+- Obsidian settings for anyone editing in Obsidian: *Settings → Files and links* → **Use [[Wikilinks]]: off**, **New link format: Relative path to file**. Obsidian then inserts compatible links and updates them when files move inside Obsidian.
 
 ## Note format
 Every note starts with YAML frontmatter:
@@ -48,18 +60,20 @@ Then:
 - Style: concise, direct, no filler. Code identifiers in backticks.
 
 ## Making changes
-- **Renaming a note:** rename the file, update the `# Title`, add the old name to `aliases`, and update every link to it:
-  `grep -rn 'Old%20name.md' *.md`
+- **Moving or renaming a note:** move it inside Obsidian if possible (it rewrites links). Otherwise, move the file, then fix every link to it and every relative link inside it (its `../` depth may change):
+  `grep -rn 'Old%20name.md' --include='*.md' .`
+  On rename, also update the `# Title` and add the old name to `aliases`. Update the hub Map.
 - **Deleting a note:** do not delete. Ask a team member; at most mark it `status: draft` and note why at the top.
-- **Adding a note:** follow the format above, link it from the hub Map and from at least one related note.
-- **After any edit, check links:**
+- **Adding a note:** pick its folder per **Structure**, follow the format above, list it in the hub Map, and link it from at least one related note.
+- **After any edit, check links** (run from this directory; both should print nothing):
   ```sh
-  # wikilinks (should print nothing)
+  # wikilinks
   grep -rn '\[\[' --include='*.md' --exclude=AGENTS.md .
-  # broken relative links (should print nothing)
+  # broken relative links
   python3 -c "import re,os,urllib.parse,glob
-  for f in set(glob.glob('*.md')) - {'AGENTS.md'}:
+  for f in set(glob.glob('**/*.md', recursive=True)) - {'AGENTS.md'}:
       for t in re.findall(r'\]\(([^)#]+?)(?:#[^)]*)?\)', open(f).read()):
-          if '://' not in t and not os.path.exists(urllib.parse.unquote(t)): print(f, '->', t)"
+          p = os.path.join(os.path.dirname(f), urllib.parse.unquote(t))
+          if '://' not in t and not os.path.exists(p): print(f, '->', t)"
   ```
 - Keep commits scoped to one change, with a message describing what changed in the knowledge base.

@@ -5,14 +5,14 @@ status: draft
 ---
 # Sensor sync architecture
 
-Hardware that makes sensor capture times precise and puts them in a shared time base. Owned by the hardware lead (below the kernel). The software side is the [Sensor timestamping pipeline](Sensor%20timestamping%20pipeline.md).
+Hardware that makes sensor capture times precise and puts them in a shared time base. Owned by the hardware lead (below the kernel). The software side is the [Sensor timestamping pipeline](../runtime/Sensor%20timestamping%20pipeline.md).
 
 ## Why it matters
 Nearly every algorithm on the headset fuses measurements from multiple sensors and assumes it knows when each was taken. Timing error becomes geometric error that grows with motion speed.
 
 | Consumer | Assumption | Failure when violated |
 |---|---|---|
-| VIO / SLAM ([t_slam](t_slam.md)) | Frame times align with IMU samples | 200°/s head turn × 5 ms error = 1° ≈ 19 px feature misprediction (AR0234, ~100° HFOV over 1920 px). Tracking degrades during fast motion |
+| VIO / SLAM ([t_slam](../tracking/t_slam.md)) | Frame times align with IMU samples | 200°/s head turn × 5 ms error = 1° ≈ 19 px feature misprediction (AR0234, ~100° HFOV over 1920 px). Tracking degrades during fast motion |
 | Stereo depth | Both cameras of a pair expose at the same instant | 6 cm baseline, object at 1 m: 1° error moves depth to ~0.77–1.4 m. Hand depth jitters |
 | Multi-view hand tracking | Front, side, bottom views are the same moment | A fast hand appears in two places |
 | RGB–mono fusion | Known capture time per row | IMX678 rolling shutter spreads exposure over several ms; needs a per-row time model |

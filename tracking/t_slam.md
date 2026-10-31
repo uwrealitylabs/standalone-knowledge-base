@@ -5,9 +5,9 @@ status: draft
 ---
 # t_slam
 
-Part of [Project Standalone](Project%20Standalone.md).
+Part of [Project Standalone](../Project%20Standalone.md).
 
-Monado's SLAM tracker adapter (`src/xrt/auxiliary/tracking/t_tracker_slam.cpp`). It sits between the [Monado headset driver](Monado%20headset%20driver.md) and an external SLAM library. The team configures and wires it; it should not need modification.
+Monado's SLAM tracker adapter (`src/xrt/auxiliary/tracking/t_tracker_slam.cpp`). It sits between the [Monado headset driver](../runtime/Monado%20headset%20driver.md) and an external SLAM library. The team configures and wires it; it should not need modification.
 
 ## Interfaces
 | Face | Interface | Used by |

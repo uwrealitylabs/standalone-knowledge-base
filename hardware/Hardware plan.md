@@ -5,7 +5,7 @@ status: draft
 ---
 # Hardware plan
 
-Part of [Project Standalone](Project%20Standalone.md).
+Part of [Project Standalone](../Project%20Standalone.md).
 
 ## Compute
 - Qualcomm RB5 dev kit (QRB5165, Snapdragon 865 class, Adreno 650 GPU). A 2020-era SoC.

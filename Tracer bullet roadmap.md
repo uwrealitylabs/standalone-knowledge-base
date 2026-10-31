@@ -10,7 +10,7 @@ Part of [Project Standalone](Project%20Standalone.md).
 First priority is an end-to-end tracer bullet from sensors up to the OpenXR API, with hardware blockers avoided by emulating inputs at defined boundaries. Each stage replaces emulation with real code or hardware, leaving everything above it unchanged.
 
 ## Emulation points
-Three input-side boundaries, from the [Monado headset driver](Monado%20headset%20driver.md) data flow. Each one further down removes more of our own code from the test.
+Three input-side boundaries, from the [Monado headset driver](runtime/Monado%20headset%20driver.md) data flow. Each one further down removes more of our own code from the test.
 
 | Emulation point | What replaces what | Real code exercised | Use it for |
 |---|---|---|---|
@@ -39,7 +39,7 @@ Goal: all driver-side code runs end to end without custom hardware.
 
 **Sink-level replay first**
 - A replay source pushes recorded frames and IMU into the SLAM and hand-tracking sinks. Use the [Monado SLAM datasets](https://huggingface.co/datasets/collabora/monado-slam-datasets) (egocentric, recorded on real XR headsets) over EuRoC (drone).
-- SLAM runs through [t_slam](t_slam.md) and VIT with stock Basalt as the baseline. Hands run through Mercury ([Hand tracking](Hand%20tracking.md)).
+- SLAM runs through [t_slam](tracking/t_slam.md) and VIT with stock Basalt as the baseline. Hands run through Mercury ([Hand tracking](tracking/Hand%20tracking.md)).
 
 **Kernel-level emulation next**
 - v4l2loopback, fed with the same recorded imagery, exercises the real V4L2 capture code.
@@ -60,7 +60,7 @@ Do not tune SLAM for peak accuracy on recorded datasets. Their resolution, FOV, 
 
 ## Stage 3: Swap in hardware incrementally
 Goal: replace one emulated contract at a time as hardware arrives.
-- **Display:** HDMI first, then the DSI panels. Requires the one-display-or-two decision ([Display](Display.md)).
+- **Display:** HDMI first, then the DSI panels. Requires the one-display-or-two decision ([Display](hardware/Display.md)).
 - **Partial hardware:** individual sensors on breakout boards (a single AR0234 or OV9281, the IMU on a dev board) to record real data. Accuracy tuning starts to mean something here.
 - **IMU:** the real sensor replaces replay.
 - **Direct-connected cameras:** front stereo, side, RGB.
@@ -73,7 +73,7 @@ Goal: replace one emulated contract at a time as hardware arrives.
 Capability order once the tracer works: 3DoF → 6DoF → hands → eyes and RGB features. Work items not yet scheduled:
 - Calibration tooling: camera–IMU and display distortion.
 - Eye-tracking software.
-- Replacing Basalt with the GPU SLAM library (swap via VIT path; see [t_slam](t_slam.md)).
+- Replacing Basalt with the GPU SLAM library (swap via VIT path; see [t_slam](tracking/t_slam.md)).
 
 ## Open questions
-- Stage 1 assumes Arch Linux ARM and a mainline kernel with Turnip. The team board currently runs Ubuntu 18.04 with Docker ([OS and kernel](OS%20and%20kernel.md)). Decide whether Stage 1 waits for the OS move or proves what it can on the current image.
+- Stage 1 assumes Arch Linux ARM and a mainline kernel with Turnip. The team board currently runs Ubuntu 18.04 with Docker ([OS and kernel](platform/OS%20and%20kernel.md)). Decide whether Stage 1 waits for the OS move or proves what it can on the current image.

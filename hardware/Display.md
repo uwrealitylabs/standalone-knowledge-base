@@ -18,7 +18,7 @@ Part of [Hardware plan](Hardware%20plan.md).
 - Required: device-tree or panel-driver bring-up, plus DRM/KMS direct mode for Monado's compositor.
 
 ## Software boundary
-The compositor drives the panels. The [Monado headset driver](Monado%20headset%20driver.md) only describes them (resolution, refresh, distortion).
+The compositor drives the panels. The [Monado headset driver](../runtime/Monado%20headset%20driver.md) only describes them (resolution, refresh, distortion).
 
 ## What selects the display
 | Layer | Code | Decides |
@@ -34,7 +34,7 @@ With no desktop, the `VK_KHR_display` target is the fit. Confirm early, since bo
 - Turnip on mainline exposes the RB5's DSI outputs as Vulkan displays.
 - Monado's Vulkan-display target works on that stack. Its display selection logic was designed for PC headsets attached to desktops.
 
-The dev kit's HDMI output is also a KMS connector, so the target can be proven on a monitor first ([Tracer bullet roadmap](Tracer%20bullet%20roadmap.md) Stage 1).
+The dev kit's HDMI output is also a KMS connector, so the target can be proven on a monitor first ([Tracer bullet roadmap](../Tracer%20bullet%20roadmap.md) Stage 1).
 
 **Consistency risk.** Nothing checks that layer 4 matches layers 1–3. The display bring-up contract should state the exact kernel mode, the builder should load a matching description, and the driver should verify at startup and fail loudly.
 
