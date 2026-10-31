@@ -5,7 +5,7 @@ status: draft
 ---
 # OS and kernel
 
-Part of [[Project Standalone]].
+Part of [Project Standalone](Project%20Standalone.md).
 
 ## Distribution
 Plan is not detailed yet. Leaning toward **Arch Linux ARM plus a custom package repository** (PKGBUILDs for kernel, Monado, drivers) instead of forking a distro. Nothing in the requirements needs a fork.

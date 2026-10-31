@@ -5,7 +5,7 @@ status: draft
 ---
 # Tracker sinks
 
-The push interface between capture and trackers in the [[Monado headset driver]]. Four data types, each with a sink that has a single push function.
+The push interface between capture and trackers in the [Monado headset driver](Monado%20headset%20driver.md). Four data types, each with a sink that has a single push function.
 
 ## Data types
 **`xrt_frame`** (one camera image)
@@ -31,7 +31,7 @@ The push interface between capture and trackers in the [[Monado headset driver]]
 ## Sink implementations
 | Category | Examples |
 |---|---|
-| Trackers | SLAM camera/IMU/ground-truth sinks ([[t_slam]]); hand-tracking async wrapper camera sinks ([[Hand tracking]]) |
+| Trackers | SLAM camera/IMU/ground-truth sinks ([t_slam](t_slam.md)); hand-tracking async wrapper camera sinks ([Hand tracking](Hand%20tracking.md)) |
 | Threading | Bounded queue (`u_sink_queue_create`), simple queue |
 | Routing | `u_sink_split_create` (one frame to two sinks), multi-way split, stereo side-by-side splitter, combiner, genlock helper |
 | Conversion | Format converters (grayscale, RGB, YUV), deinterleaver, quirk-fixing node |
@@ -41,7 +41,7 @@ Producers in upstream Monado: V4L2 frame server, EuRoC player, WMR/Vive/RealSens
 
 ## Contract points
 - **Pixel format.** Mono tracking cameras arrive as L8. If V4L2 delivers packed 10-bit raw, capture or a conversion node unpacks it. That costs CPU per frame; decide where it happens.
-- **Timestamps.** `timestamp` in Monado's clock, at the time the contract specifies (ideally mid-exposure), identical across both frames of a stereo pair. SLAM pairs frames by timestamp. See [[Sensor timestamping pipeline]].
+- **Timestamps.** `timestamp` in Monado's clock, at the time the contract specifies (ideally mid-exposure), identical across both frames of a stereo pair. SLAM pairs frames by timestamp. See [Sensor timestamping pipeline](Sensor%20timestamping%20pipeline.md).
 - **Camera index mapping.** `cams[n]` matches calibration entry n. Make the mapping explicit in builder config.
 - **IMU convention.** SI units, IMU axes, steady rate, same clock as frames. Whether the IMU-to-camera transform is applied by SLAM or device code is decided in calibration, not in the samples.
 - **Hold time.** If frames wrap V4L2 buffers, put a bounded queue in front of any consumer that may hold frames long. Otherwise a slow tracker starves capture of buffers.

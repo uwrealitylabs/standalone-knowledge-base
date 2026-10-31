@@ -5,7 +5,7 @@ status: draft
 ---
 # Hardware plan
 
-Part of [[Project Standalone]].
+Part of [Project Standalone](Project%20Standalone.md).
 
 ## Compute
 - Qualcomm RB5 dev kit (QRB5165, Snapdragon 865 class, Adreno 650 GPU). A 2020-era SoC.
@@ -27,17 +27,17 @@ Bottom and eye cameras were originally specified as SC035HGS.
 
 Sensor notes:
 - AR0234: 1920×1200 at up to 120 fps. More resolution than SLAM needs; bin or crop to save bandwidth.
-- IMX678 is rolling shutter, so fusing it with the mono cameras is always approximate (see [[Sensor sync architecture]]).
+- IMX678 is rolling shutter, so fusing it with the mono cameras is always approximate (see [Sensor sync architecture](Sensor%20sync%20architecture.md)).
 
 ## IMU
 - LSM6DSV family (per hardware lead), whichever variant is cheaper; on-chip ML/fusion not needed.
 - North Star's IMU does not carry over. The Deck X gets its IMU from the embedded RealSense T261, which Intel has discontinued. The T261 tracks on its own clock, so it cannot be aligned with our cameras.
 
 ## Display and optics
-From Project North Star → [[Display]].
+From Project North Star → [Display](Display.md).
 
 ## Also required
-- **IR illuminators** (850 or 940 nm) for eye tracking. The IR-pass filter is useless without them. Strobe tied to the eye-camera exposure (see [[Sensor sync architecture]]).
+- **IR illuminators** (850 or 940 nm) for eye tracking. The IR-pass filter is useless without them. Strobe tied to the eye-camera exposure (see [Sensor sync architecture](Sensor%20sync%20architecture.md)).
 - **Power and thermals.** Many cameras plus the SoC under sustained load. The RB5 dev kit is physically large; this revision likely needs a tethered compute pack.
 
 ## Open questions

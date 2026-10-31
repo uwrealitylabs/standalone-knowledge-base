@@ -5,7 +5,7 @@ status: draft
 ---
 # Monado headset driver
 
-Part of [[Project Standalone]].
+Part of [Project Standalone](Project%20Standalone.md).
 
 The whole driver-side package for our hardware inside the Monado fork. It runs in userspace inside `monado-service`; it is not a kernel driver. It has one face toward the core (`xrt_device`) and a lot of internal plumbing behind it.
 
@@ -53,7 +53,7 @@ In out-of-process mode, the app's call goes through Monado's client library over
 | Builder | `xrt_builder` | Detects whether the headset is present. On startup, creates every device and tracker, connects the frame pipeline, assigns roles (head, left hand, right hand) and hands the finished set to the core |
 | HMD device | `xrt_device` | Answers pose and view queries; provides display description and distortion |
 | Hand and eye devices | `xrt_device` (one or more) | Expose hand joints and gaze to the core. Each wraps the matching tracker |
-| Capture | Producer side of the sinks (own code, or Monado's V4L2 frame server) | Turns V4L2 buffers and IMU readings into frames and samples and pushes them → [[Tracker sinks]] |
+| Capture | Producer side of the sinks (own code, or Monado's V4L2 frame server) | Turns V4L2 buffers and IMU readings into frames and samples and pushes them → [Tracker sinks](Tracker%20sinks.md) |
 | Frame pipeline wiring | Frame context and pipeline nodes | Owns queues, converters, splitters, recorder and debug views; starts and stops them as a unit |
 | Calibration loading | Monado's calibration and display structures | Parses camera, IMU, display and head-to-eye calibration into the forms trackers and devices expect |
 | Pose composition | Tracker query interfaces | Converts the tracker's IMU-frame pose into head and eye poses; keeps the pose history used for prediction |
@@ -61,9 +61,9 @@ In out-of-process mode, the app's call goes through Monado's client library over
 | Debug and tuning | Monado debug variables and logging | Live values and toggles in the debug UI, needed for tracking tuning |
 
 ## Not in this driver
-- **Tracker algorithms.** The driver creates and connects trackers; Basalt, Mercury and our own trackers are separate libraries behind their interfaces. SLAM is loaded through [[t_slam]]; hands via [[Hand tracking]].
+- **Tracker algorithms.** The driver creates and connects trackers; Basalt, Mercury and our own trackers are separate libraries behind their interfaces. SLAM is loaded through [t_slam](t_slam.md); hands via [Hand tracking](Hand%20tracking.md).
 - **Compositor and OpenXR state tracker.** Core, reused from upstream.
-- **Display output.** The driver only describes the display. The compositor drives the panels through Vulkan and KMS (see [[Display]]).
+- **Display output.** The driver only describes the display. The compositor drives the panels through Vulkan and KMS (see [Display](Display.md)).
 
 ## Builder
 The builder is code, not configuration: written in C as part of the driver and registered in Monado's builder list (`src/xrt/targets/common/target_lists.c`). It is not in the data path; it acts once at startup.
@@ -111,10 +111,10 @@ Hands follow the same pattern: query the hand tracker, transform joints into tra
 | Head and eye poses for time warp | HMD `xrt_device` | Compositor calls `get_view_poses` just before display |
 | Physical output, presenting, vblank | Compositor output target | Direct mode via Vulkan display extensions on KMS, or a desktop window for development |
 
-Nothing checks that the device's display description matches the kernel mode. If they disagree, the compositor still renders to the description, giving scaling artifacts or wrong frame pacing. The driver should check at startup and fail loudly. Display selection layers are in [[Display]].
+Nothing checks that the device's display description matches the kernel mode. If they disagree, the compositor still renders to the description, giving scaling artifacts or wrong frame pacing. The driver should check at startup and fail loudly. Display selection layers are in [Display](Display.md).
 
 ## Core dependencies
-The state tracker and compositor are device-agnostic: they use only what the device interface provides, which is why Stage 1 of the [[Tracer bullet roadmap]] can use a simulated device. They are not capability- or platform-agnostic:
+The state tracker and compositor are device-agnostic: they use only what the device interface provides, which is why Stage 1 of the [Tracer bullet roadmap](Tracer%20bullet%20roadmap.md) can use a simulated device. They are not capability- or platform-agnostic:
 1. **What devices advertise.** Input mapping uses binding tables in core code. Standard inputs (head pose, hand tracking, eye gaze) need no core changes; a new physical controller would.
 2. **Platform and GPU.** The compositor depends on Vulkan, Turnip and its output targets. Most RB5 risk is here.
 3. **Extension coverage.** If an OpenXR extension isn't implemented in the state tracker, no device can expose it.
@@ -138,6 +138,6 @@ Monado's WMR and Rift S drivers contain every component above; read one alongsid
 Monado's XRT interfaces are subject to change. Keep the fork small; upstreaming the driver eventually is the lowest-maintenance path.
 
 ## Open questions
-- One logical dual-DSI display vs two independent displays. Tracked in [[Display]].
-- Sensor timestamp clock domain delivered by the hardware layer. See [[Sensor sync architecture]] and [[Sensor timestamping pipeline]].
-- Multi-camera hand tracking design. See [[Hand tracking]].
+- One logical dual-DSI display vs two independent displays. Tracked in [Display](Display.md).
+- Sensor timestamp clock domain delivered by the hardware layer. See [Sensor sync architecture](Sensor%20sync%20architecture.md) and [Sensor timestamping pipeline](Sensor%20timestamping%20pipeline.md).
+- Multi-camera hand tracking design. See [Hand tracking](Hand%20tracking.md).

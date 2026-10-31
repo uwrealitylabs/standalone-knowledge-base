@@ -5,14 +5,14 @@ status: draft
 ---
 # t_slam
 
-Part of [[Project Standalone]].
+Part of [Project Standalone](Project%20Standalone.md).
 
-Monado's SLAM tracker adapter (`src/xrt/auxiliary/tracking/t_tracker_slam.cpp`). It sits between the [[Monado headset driver]] and an external SLAM library. The team configures and wires it; it should not need modification.
+Monado's SLAM tracker adapter (`src/xrt/auxiliary/tracking/t_tracker_slam.cpp`). It sits between the [Monado headset driver](Monado%20headset%20driver.md) and an external SLAM library. The team configures and wires it; it should not need modification.
 
 ## Interfaces
 | Face | Interface | Used by |
 |---|---|---|
-| Input | `xrt_slam_sinks` (camera, IMU, ground-truth, hand-mask sinks); see [[Tracker sinks]] | Capture or replay source |
+| Input | `xrt_slam_sinks` (camera, IMU, ground-truth, hand-mask sinks); see [Tracker sinks](Tracker%20sinks.md) | Capture or replay source |
 | Output | `xrt_tracked_slam_get_tracked_pose(xts, time, &pose)` | HMD device |
 | Algorithm | VIT, a C interface to a shared library loaded at runtime | Basalt fork now, GPU SLAM later |
 

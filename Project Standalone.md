@@ -10,20 +10,20 @@ UW Reality Labs' in-house standalone XR headset. Compute is a Qualcomm RB5. Disp
 ## Map
 | Area | Notes |
 |---|---|
-| Hardware | [[Hardware plan]], [[Display]] |
-| Timing | [[Sensor sync architecture]], [[Sensor timestamping pipeline]] |
-| Runtime | [[Monado headset driver]], [[Tracker sinks]], [[t_slam]], [[Hand tracking]] |
-| OS | [[OS and kernel]] |
-| Plan | [[Tracer bullet roadmap]] |
+| Hardware | [Hardware plan](Hardware%20plan.md), [Display](Display.md) |
+| Timing | [Sensor sync architecture](Sensor%20sync%20architecture.md), [Sensor timestamping pipeline](Sensor%20timestamping%20pipeline.md) |
+| Runtime | [Monado headset driver](Monado%20headset%20driver.md), [Tracker sinks](Tracker%20sinks.md), [t_slam](t_slam.md), [Hand tracking](Hand%20tracking.md) |
+| OS | [OS and kernel](OS%20and%20kernel.md) |
+| Plan | [Tracer bullet roadmap](Tracer%20bullet%20roadmap.md) |
 
 ## Software components
 | Layer   | Scope                                                                                                                                                                                                    |
 | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | App     | Launcher in Godot via OpenXR. Starts other OpenXR apps and composites non-XR apps as in-app windows. Repo: https://github.com/uwrealitylabs/standalone-launcher                                          |
 | CV      | SLAM: hardware-accelerated (e.g. GPU) implementation, not Basalt out of the box. Hand tracking: required; open whether to build from scratch as a learning exercise or integrate (e.g. Monado's Mercury) |
-| Runtime | Monado fork with drivers for our hardware → [[Monado headset driver]]                                                                                                                                    |
-| OS      | Arch-based; see [[OS and kernel]]                                                                                                                                                                        |
-| Drivers | Displays, cameras, IMU. Panel driver ported from the RPi 5 build → [[Display]]                                                                                                                           |
+| Runtime | Monado fork with drivers for our hardware → [Monado headset driver](Monado%20headset%20driver.md)                                                                                                                                    |
+| OS      | Arch-based; see [OS and kernel](OS%20and%20kernel.md)                                                                                                                                                                        |
+| Drivers | Displays, cameras, IMU. Panel driver ported from the RPi 5 build → [Display](Display.md)                                                                                                                           |
 
 ## Ownership
 - Hardware lead: everything below the kernel (FPGA firmware, camera sync, hardware timestamping).
