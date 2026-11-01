@@ -2,6 +2,7 @@
 tags: [plan, roadmap, tracer-bullet]
 aliases: [Roadmap, tracer bullet, tracer plan, sequencing, milestones]
 status: draft
+author: "Claude Opus 5.5"
 ---
 # Tracer bullet roadmap
 
@@ -10,7 +11,7 @@ Part of [Project Standalone](Project%20Standalone.md).
 First priority is an end-to-end tracer bullet from sensors up to the OpenXR API, with hardware blockers avoided by emulating inputs at defined boundaries. Each stage replaces emulation with real code or hardware, leaving everything above it unchanged.
 
 ## Emulation points
-Three input-side boundaries, from the [Monado headset driver](runtime/Monado%20headset%20driver.md) data flow. Each one further down removes more of our own code from the test.
+Three input-side boundaries, from the [Monado headset driver](standalone-driver/Monado%20headset%20driver.md) data flow. Each one further down removes more of our own code from the test.
 
 | Emulation point | What replaces what | Real code exercised | Use it for |
 |---|---|---|---|
@@ -38,7 +39,7 @@ Goal: all driver-side code runs end to end without custom hardware.
 - North Star display description and distortion.
 
 **Sink-level replay first**
-- A replay source pushes recorded frames and IMU into the SLAM and hand-tracking sinks. Use the [Monado SLAM datasets](https://huggingface.co/datasets/collabora/monado-slam-datasets) (egocentric, recorded on real XR headsets) over EuRoC (drone).
+- A replay source pushes recorded frames and IMU into the SLAM and hand-tracking sinks: the [EuRoC player](emulation/EuRoC%20player.md). SLAM half: [SLAM tracer bullet from EuRoC](standalone-driver/task-guides/SLAM%20tracer%20bullet%20from%20EuRoC.md). Use the [Monado SLAM datasets](https://huggingface.co/datasets/collabora/monado-slam-datasets) (egocentric, recorded on real XR headsets) over EuRoC (drone).
 - SLAM runs through [t_slam](tracking/t_slam.md) and VIT with stock Basalt as the baseline. Hands run through Mercury ([Hand tracking](tracking/Hand%20tracking.md)).
 
 **Kernel-level emulation next**

@@ -8,15 +8,18 @@ Guidelines for humans and AI agents modifying this directory. It is the Project 
 | Top level | Notes about the whole project: `Project Standalone.md` (hub), `Tracer bullet roadmap.md`. Plus `AGENTS.md` |
 | `hardware/` | Physical components and below-kernel design: sensors, display panels and optics, sync |
 | `platform/` | OS, kernel, distribution, board setup, toolchains |
-| `runtime/` | Monado fork: headset driver, capture, timestamping, compositor integration |
+| `runtime/` | Monado runtime internals we build on: sinks and the frame graph, capture, timestamping, compositor integration |
 | `tracking/` | Perception: SLAM, hand and eye tracking, tracker interfaces |
+| `emulation/` | Running the stack without real hardware: Monado's replay sources, simulated devices, kernel-level emulation |
+| `standalone-driver/` | Documentation of the team's own code in the Monado fork (driver, builder, branches). Subfolders mirror topic folders, e.g. `standalone-driver/emulation/`; `standalone-driver/guides/` holds setup and how-to guides; `standalone-driver/task-guides/` holds task briefs for team members |
 | `attachments/` | Images and other binaries |
 
 - One concept per note; the filename is the note title (`Hardware plan.md` → `# Hardware plan`).
 - Note filenames are unique across the whole tree, even in different folders.
 - Folder names are lowercase, one word where possible (no spaces).
 - Place a note in the folder of its primary subject. Cross-cutting notes link to each other rather than being duplicated.
-- Add a new folder only when at least ~3 notes would go in it. When adding one, add a row to this table and to the hub's **Map** table.
+- Notes about upstream Monado or third-party code go in the topic folders; notes about code the team wrote go under `standalone-driver/`, and name the branch and commit they describe.
+- Add a new folder only when at least ~3 notes would go in it, or when a team member asks for it. When adding one, add a row to this table and to the hub's **Map** table.
 - `Project Standalone.md` is the hub. Every note links back to it (directly or via its parent note), and every new note gets listed in the hub's **Map** table under its folder.
 
 ## Links
@@ -42,6 +45,7 @@ Every note starts with YAML frontmatter:
 tags: [area, topic]
 aliases: [other names this note is known by]
 status: draft        # draft | reviewed
+author: "Name <email>"  # person who wrote it, or the model, e.g. "Claude Opus 5.5"
 ---
 ```
 Then:
@@ -51,6 +55,7 @@ Then:
 4. `## Open questions` as the last section when anything is undecided.
 
 ## Content rules
+- **Authorship.** `author` records who wrote the note. Keep it when editing; if someone else substantially rewrites a note, change it to a list (`author: ["A", "B"]`).
 - **Decisions vs proposals.** Distinguish what the team has decided from recommendations (including AI-generated analysis). Decisions are stated plainly; proposals say "proposed", "suggested" or sit under open questions. Never promote a proposal to a decision without a team member confirming it.
 - **Supersession.** When a decision changes, update the note in place and, if useful, record the old value briefly ("originally SC035HGS"). Do not leave contradictory statements across notes; search the directory for the old value.
 - **No duplication.** State a fact in one note and link to it from others.

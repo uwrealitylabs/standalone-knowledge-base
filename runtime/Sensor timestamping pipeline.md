@@ -2,10 +2,11 @@
 tags: [software, timing, tracking, monado]
 aliases: [timestamping, timestamp pipeline]
 status: draft
+author: "Claude Opus 5.5"
 ---
 # Sensor timestamping pipeline
 
-Software between V4L2/IIO capture and Monado that turns hardware capture times into `CLOCK_MONOTONIC` timestamps. Depends on [Sensor sync architecture](../hardware/Sensor%20sync%20architecture.md). Its output feeds the capture source in the [Monado headset driver](Monado%20headset%20driver.md).
+Software between V4L2/IIO capture and Monado that turns hardware capture times into `CLOCK_MONOTONIC` timestamps. Depends on [Sensor sync architecture](../hardware/Sensor%20sync%20architecture.md). Its output feeds the capture source in the [Monado headset driver](../standalone-driver/Monado%20headset%20driver.md).
 
 The boundary with the hardware lead's work depends on how timestamps are delivered; see the open questions.
 

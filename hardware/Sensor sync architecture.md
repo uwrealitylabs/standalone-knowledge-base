@@ -2,6 +2,7 @@
 tags: [hardware, sync, timing, tracking]
 aliases: [sync architecture, FSYNC, hardware sync]
 status: draft
+author: "Claude Opus 5.5"
 ---
 # Sensor sync architecture
 

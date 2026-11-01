@@ -2,6 +2,7 @@
 tags: [hardware, display, drivers]
 aliases: [displays, panels, panel driver]
 status: draft
+author: "Claude Opus 5.5"
 ---
 # Display
 
@@ -18,7 +19,7 @@ Part of [Hardware plan](Hardware%20plan.md).
 - Required: device-tree or panel-driver bring-up, plus DRM/KMS direct mode for Monado's compositor.
 
 ## Software boundary
-The compositor drives the panels. The [Monado headset driver](../runtime/Monado%20headset%20driver.md) only describes them (resolution, refresh, distortion).
+The compositor drives the panels. The [Monado headset driver](../standalone-driver/Monado%20headset%20driver.md) only describes them (resolution, refresh, distortion).
 
 ## What selects the display
 | Layer | Code | Decides |

@@ -2,6 +2,7 @@
 tags: [os, kernel, linux]
 aliases: [OS, kernel, Arch]
 status: draft
+author: "Claude Opus 5.5"
 ---
 # OS and kernel
 
@@ -12,7 +13,7 @@ Plan is not detailed yet. Leaning toward **Arch Linux ARM plus a custom package 
 
 ## Current dev environment
 - The team's RB5 runs Ubuntu 18.04, accessed remotely over Tailscale/SSH.
-- Newer software (e.g. Monado build deps) runs in Docker containers; no in-place OS upgrade.
+- Newer software (e.g. Monado build deps) runs in an Ubuntu 24.04 Docker container; no in-place OS upgrade. Setup: [EB5 Monado Development Setup](../standalone-driver/guides/EB5%20Monado%20Development%20Setup.md).
 - The image ships no vendor Vulkan driver (Adreno GLES/EGL only). A self-built Mesa Turnip works in containers on the Adreno 650 through the KGSL kernel driver.
 
 ## Kernel choice

@@ -1,13 +1,30 @@
 ---
-tags: [monado, driver, architecture]
-aliases: [headset driver, UWRL Monado driver]
+tags: [standalone-driver, monado, driver, architecture]
+aliases: [headset driver, UWRL Monado driver, standalone driver, standalone_hmd]
 status: draft
+author: "Claude Opus 5.5"
 ---
 # Monado headset driver
 
 Part of [Project Standalone](../Project%20Standalone.md).
 
-The whole driver-side package for our hardware inside the Monado fork. It runs in userspace inside `monado-service`; it is not a kernel driver. It has one face toward the core (`xrt_device`) and a lot of internal plumbing behind it.
+The whole driver-side package for our hardware inside the Monado fork. It runs in userspace inside `monado-service`; it is not a kernel driver. It has one face toward the core (`xrt_device`) and a lot of internal plumbing behind it. This note is the overview for `standalone-driver/`; it mixes the target design with Monado background.
+
+## Our code
+Repo `uwrealitylabs/standalone-monado-driver`, branch `dev` at `6bbefe8`. Paths relative to `src/xrt/`.
+
+| Piece | Where | State on `dev` |
+|---|---|---|
+| HMD device | `drivers/standalone/standalone_hmd.c`, `standalone_interface.h` | Skeleton derived from Monado's sample driver. `get_tracked_pose` (`:99`) answers from a relation history seeded with an identity pose; no tracker |
+| Builder | `targets/common/target_builder_standalone.c`, registered in `targets/common/target_lists.c` | `standalone_open_system_impl` (`:61`) creates the HMD and assigns the head role. Receives `xfctx` and `origin` but does not use them yet; no capture or tracker |
+| Build switch | CMake option `XRT_BUILD_DRIVER_STANDALONE` | |
+| Frame context | `xfctx` handed to the builder belongs to the system-devices object (`targets/helpers/target_builder_helpers.c:107–118`) | Anything registered there is torn down with the device set |
+
+Branches: `mock-camera-input` → [Mock capture](emulation/Mock%20capture.md).
+
+Development environment: [EB5 Monado Development Setup](guides/EB5%20Monado%20Development%20Setup.md) (Ubuntu 24.04 container on the EB5).
+
+Task guides: [SLAM tracer bullet from EuRoC](task-guides/SLAM%20tracer%20bullet%20from%20EuRoC.md).
 
 ## Data flow
 ```
@@ -53,8 +70,8 @@ In out-of-process mode, the app's call goes through Monado's client library over
 | Builder | `xrt_builder` | Detects whether the headset is present. On startup, creates every device and tracker, connects the frame pipeline, assigns roles (head, left hand, right hand) and hands the finished set to the core |
 | HMD device | `xrt_device` | Answers pose and view queries; provides display description and distortion |
 | Hand and eye devices | `xrt_device` (one or more) | Expose hand joints and gaze to the core. Each wraps the matching tracker |
-| Capture | Producer side of the sinks (own code, or Monado's V4L2 frame server) | Turns V4L2 buffers and IMU readings into frames and samples and pushes them → [Tracker sinks](../tracking/Tracker%20sinks.md) |
-| Frame pipeline wiring | Frame context and pipeline nodes | Owns queues, converters, splitters, recorder and debug views; starts and stops them as a unit |
+| Capture | Producer side of the sinks (own code, or Monado's V4L2 frame server) | Turns V4L2 buffers and IMU readings into frames and samples and pushes them → [Sinks](../runtime/Sinks.md) |
+| Frame pipeline wiring | Frame context and pipeline nodes | Owns queues, converters, splitters, recorder and debug views; starts and stops them as a unit. See [Sinks](../runtime/Sinks.md) |
 | Calibration loading | Monado's calibration and display structures | Parses camera, IMU, display and head-to-eye calibration into the forms trackers and devices expect |
 | Pose composition | Tracker query interfaces | Converts the tracker's IMU-frame pose into head and eye poses; keeps the pose history used for prediction |
 | Sensor control | V4L2 controls, or whatever path the hardware lead exposes | Auto-exposure and gain for tracking cameras; IR illuminators if software-controlled |
@@ -139,5 +156,5 @@ Monado's XRT interfaces are subject to change. Keep the fork small; upstreaming 
 
 ## Open questions
 - One logical dual-DSI display vs two independent displays. Tracked in [Display](../hardware/Display.md).
-- Sensor timestamp clock domain delivered by the hardware layer. See [Sensor sync architecture](../hardware/Sensor%20sync%20architecture.md) and [Sensor timestamping pipeline](Sensor%20timestamping%20pipeline.md).
+- Sensor timestamp clock domain delivered by the hardware layer. See [Sensor sync architecture](../hardware/Sensor%20sync%20architecture.md) and [Sensor timestamping pipeline](../runtime/Sensor%20timestamping%20pipeline.md).
 - Multi-camera hand tracking design. See [Hand tracking](../tracking/Hand%20tracking.md).

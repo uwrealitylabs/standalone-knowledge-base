@@ -2,6 +2,7 @@
 tags: [hardware, sensors]
 aliases: [hardware, sensor list, BOM]
 status: draft
+author: "Claude Opus 5.5"
 ---
 # Hardware plan
 
