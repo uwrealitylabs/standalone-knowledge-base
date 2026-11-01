@@ -1,11 +1,13 @@
 # AGENTS.md
 
-Guidelines for humans and AI agents modifying this directory. It is the Project Standalone knowledge base (UW Reality Labs standalone XR headset). It is edited in Obsidian and must also render correctly on GitHub and in plain Markdown viewers.
+Guidelines for humans and AI agents modifying this repository. It is the Project Standalone knowledge base (UW Reality Labs standalone XR headset). It is edited in Obsidian and must also render correctly on GitHub and in plain Markdown viewers. All notes live under `docs/`, which is mirrored one-way to Notion (see **Notion mirror**). `AGENTS.md` and `.github/` sit at the repository root and are not notes.
 
 ## Structure
+Locations are relative to `docs/`.
+
 | Location | Contents |
 |---|---|
-| Top level | Notes about the whole project: `Project Standalone.md` (hub), `Tracer bullet roadmap.md`. Plus `AGENTS.md` |
+| Top level of `docs/` | Notes about the whole project: `Project Standalone.md` (hub), `Tracer bullet roadmap.md` |
 | `hardware/` | Physical components and below-kernel design: sensors, display panels and optics, sync |
 | `platform/` | OS, kernel, distribution, board setup, toolchains |
 | `runtime/` | Monado runtime internals we build on: sinks and the frame graph, capture, timestamping, compositor integration |
@@ -63,6 +65,13 @@ Then:
 - **Ownership boundaries.** Hardware below the kernel (FPGA firmware, sync, hardware timestamping) is owned by the hardware lead. Record their decisions as theirs; do not specify their implementation as settled.
 - **Sources.** Link upstream docs and code paths (e.g. `src/xrt/auxiliary/tracking/t_tracker_slam.cpp`) for claims about Monado or other external code. Note that external interfaces may change.
 - Style: concise, direct, no filler. Code identifiers in backticks.
+
+## Notion mirror
+On every push to `main` that touches `docs/`, `.github/workflows/notion-sync.yml` runs [nogisync](https://github.com/Fencer-Security/nogisync) and mirrors `docs/` under the Notion page **Knowledge Base** (UWRL workspace). Folders become pages and notes become child pages.
+- **One-way.** Edits made in Notion are overwritten on the next sync. Edit here.
+- **Titles.** A note's Notion title is its filename, as long as the note has frontmatter (without frontmatter, nogisync title-cases the filename). Don't add a `title:` key unless the Notion title should differ. Folder pages are title-cased (`standalone-driver` → "Standalone Driver").
+- **Matching is by title under the parent page.** Renaming or moving a note creates a new Notion page and leaves the old one; deleting a note leaves its page. After a rename, move or deletion, archive the stale page in Notion by hand.
+- **Errors.** nogisync logs some Notion API failures without failing the run; check the job log for `ERROR` lines after structural changes.
 
 ## Making changes
 - **Moving or renaming a note:** move it inside Obsidian if possible (it rewrites links). Otherwise, move the file, then fix every link to it and every relative link inside it (its `../` depth may change):

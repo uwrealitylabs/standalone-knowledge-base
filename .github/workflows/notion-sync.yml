@@ -1,0 +1,58 @@
+# Mirrors docs/ one-way into the Notion page "Knowledge Base" (UWRL workspace).
+# Tool: nogisync (https://github.com/Fencer-Security/nogisync), run as its CLI
+# rather than its Docker action because the action does not expose
+# --provenance-source-url, and without it the "Source:" links on each Notion
+# page would miss the docs/ prefix.
+#
+# Setup (once):
+#   1. Notion: create an internal integration (read, insert and update content),
+#      then on the "Knowledge Base" page: ... → Connections → add the integration.
+#   2. GitHub: repo Settings → Secrets and variables → Actions → New repository
+#      secret WRL_WORKSPACE_NOTION_INTEGRATION = the integration token.
+name: Sync docs to Notion
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - '.github/workflows/notion-sync.yml'
+  workflow_dispatch:
+
+# Never run two syncs at once; pages are matched by title, so overlapping runs
+# can create duplicates.
+concurrency:
+  group: notion-sync
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      # "Knowledge Base". Keep the hyphenated form: nogisync compares it as a
+      # string against the hyphenated IDs Notion returns, and an unhyphenated ID
+      # never matches, so top-level pages would be re-created on every run.
+      NOTION_PARENT_PAGE_ID: 40bbc072-402f-8063-af48-cd899df5fdfc
+      NOGISYNC_VERSION: v1.3.3
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v6
+
+      - name: Sync docs/ to Notion
+        env:
+          NOTION_API_KEY: ${{ secrets.WRL_WORKSPACE_NOTION_INTEGRATION }}
+          SOURCE_URL: https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/docs
+        run: |
+          uvx --python 3.14 \
+            --from "git+https://github.com/Fencer-Security/nogisync@${NOGISYNC_VERSION}" \
+            nogisync \
+            --token "$NOTION_API_KEY" \
+            --parent-page-id "$NOTION_PARENT_PAGE_ID" \
+            --path docs/ \
+            --provenance-source-url "$SOURCE_URL" \
+            --workers 2 \
+            --fail-on-error
